@@ -31,11 +31,11 @@ class m110517_155003_create_tables_audit_trail extends CDbMigration
 		//Index these bad boys for speedy lookups
 		$this->createIndex( 'idx_audit_trail_user_id', '{{audit_trail}}', 'user_id');
 		$this->createIndex( 'idx_audit_trail_model_id', '{{audit_trail}}', 'model_id');
-		$this->createIndex( 'idx_audit_trail_model', '{{audit_trail}}', 'model');
-		$this->createIndex( 'idx_audit_trail_field', '{{audit_trail}}', 'field');
-		$this->createIndex( 'idx_audit_trail_old_value', '{{audit_trail}}', 'old_value');
-		$this->createIndex( 'idx_audit_trail_new_value', '{{audit_trail}}', 'new_value');
-		$this->createIndex( 'idx_audit_trail_action', '{{audit_trail}}', 'action');
+		//$this->createIndex( 'idx_audit_trail_model', '{{audit_trail}}', 'model');
+		//$this->createIndex( 'idx_audit_trail_field', '{{audit_trail}}', 'field');
+		//$this->createIndex( 'idx_audit_trail_old_value', '{{audit_trail}}', 'old_value');
+		//$this->createIndex( 'idx_audit_trail_new_value', '{{audit_trail}}', 'new_value');
+		//$this->createIndex( 'idx_audit_trail_action', '{{audit_trail}}', 'action');
 	}
 
 	/**
