@@ -21,14 +21,14 @@ class LoggableBehavior extends CActiveRecordBehavior {
 		$oldattributes = $this->_oldAttributes;
 
 		// Lets unset fields which are not allowed
-		if (sizeof($allowedFields) > 0){
-			foreach($newattributes as $f => $v){
+		if (sizeof($allowedFields) > 0) {
+			foreach ($newattributes as $f => $v) {
 				if (array_search($f, $allowedFields) === false) {
 					unset($newattributes[$f]);
 				}
 			}
 
-			foreach($oldattributes as $f => $v){
+			foreach ($oldattributes as $f => $v) {
 				if (array_search($f, $allowedFields) === false) {
 					unset($oldattributes[$f]);
 				}
@@ -36,14 +36,14 @@ class LoggableBehavior extends CActiveRecordBehavior {
 		}
 
 		// Lets unset fields which are ignored
-		if (sizeof($ignoredFields) > 0){
-			foreach($newattributes as $f => $v){
+		if (sizeof($ignoredFields) > 0) {
+			foreach ($newattributes as $f => $v) {
 				if (array_search($f, $ignoredFields) !== false) {
 					unset($newattributes[$f]);
 				}
 			}
 
-			foreach($oldattributes as $f => $v){
+			foreach ($oldattributes as $f => $v) {
 				if (array_search($f, $ignoredFields) !== false) {
 					unset($oldattributes[$f]);
 				}
@@ -52,7 +52,7 @@ class LoggableBehavior extends CActiveRecordBehavior {
 
 		// If no difference then WHY?
 		// There is some kind of problem here that means "0" and 1 do not diff for array_diff so beware: stackoverflow.com/questions/12004231/php-array-diff-weirdness :S
-		if (count(array_diff_assoc($newattributes, $oldattributes)) <= 0){
+		if (count(array_diff_assoc($newattributes, $oldattributes)) <= 0) {
 			return;
 		}
 
@@ -76,7 +76,7 @@ class LoggableBehavior extends CActiveRecordBehavior {
 			$old = isset($oldattributes[$name]) ? $oldattributes[$name] : '';
 
 			// If we are skipping nulls then lets see if both sides are null
-			if ($this->skipNulls && empty($old) && empty($value)){
+			if ($this->skipNulls && empty($old) && empty($value)) {
 				continue;
 			}
 
