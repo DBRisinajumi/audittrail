@@ -1,12 +1,12 @@
 <?php
 
 /**
- * This is the model class for table "tbl_audit_trail".
+ * This is the model class for table "{{audit_trail}}".
  */
 class AuditTrail extends CActiveRecord
 {
 	/**
-	 * The followings are the available columns in table 'tbl_audit_trail':
+	 * The followings are the available columns in table '{{audit_trail}}':
 	 * @var integer $id
 	 * @var string $new_value
 	 * @var string $old_value
@@ -35,7 +35,7 @@ class AuditTrail extends CActiveRecord
 		if ( isset(Yii::app()->params['AuditTrail']) && isset(Yii::app()->params['AuditTrail']['table']) )
 		    return Yii::app()->params['AuditTrail']['table'];
 		else
-		    return 'tbl_audit_trail';
+		    return '{{audit_trail}}';
 	}
 
 	/**
