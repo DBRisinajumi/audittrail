@@ -14,7 +14,7 @@ class m110517_155003_create_tables_audit_trail extends CDbMigration
 		//table from version 1 of the extension. Other migrations will
 		//upgrade it from here if we ever need to. This was done so
 		//that older versions can still use migrate functionality to upgrade.
-		$this->createTable( 'tbl_audit_trail',
+		$this->createTable( '{{audit_trail}}',
 			array(
 				'id' => 'pk',
 				'old_value' => 'text',
@@ -45,7 +45,7 @@ class m110517_155003_create_tables_audit_trail extends CDbMigration
 	 */
 	public function down()
 	{
-		$this->dropTable( 'tbl_audit_trail' );
+		$this->dropTable( '{{audit_trail}}' );
 	}
 
 	/**
