@@ -55,11 +55,14 @@ class LoggableBehavior extends CActiveRecordBehavior{
 		if(count(array_diff_assoc($newattributes, $oldattributes)) <= 0) return;
 
 		// If this is a new record lets add a CREATE notification
-		if ($this->getOwner()->getIsNewRecord())
-			$this->leaveTrail('CREATE');
+		if ($this->getOwner()->getIsNewRecord()){
+			$pageId = $this->leaveTrailPage('CREATE');
+                } else {
+                        $pageId = $this->leaveTrailPage('CHANGE');
+                }
 
 		// Now lets actually write the attributes
-		$this->auditAttributes($newattributes, $oldattributes);
+		$this->auditAttributes($pageId, $newattributes, $oldattributes);
 		
 		// Reset old attributes to handle the case with the same model instance updated multiple times
 		$this->setOldAttributes($this->getOwner()->getAttributes());
@@ -67,11 +70,11 @@ class LoggableBehavior extends CActiveRecordBehavior{
 		return parent::afterSave($event);
 	}
 
-	public function auditAttributes($newattributes, $oldattributes = array()){
+	public function auditAttributes($pageId, $newattributes, $oldattributes = array()){
 
 		foreach ($newattributes as $name => $value) {
 			$old = isset($oldattributes[$name]) ? $oldattributes[$name] : '';
-
+                        
 			// If we are skipping nulls then lets see if both sides are null
 			if($this->skipNulls && empty($old) && empty($value)){
 				continue;
@@ -79,13 +82,13 @@ class LoggableBehavior extends CActiveRecordBehavior{
 
 			// If they are not the same lets write an audit log
 			if ($value != $old) {
-				$this->leaveTrail($this->getOwner()->getIsNewRecord() ? 'SET' : 'CHANGE', $name, $value, $old);
+				$this->leaveTrailRecord($pageId, $name, $value, $old);
 			}
 		}
 	}
 
 	public function afterDelete($event){
-		$this->leaveTrail('DELETE');
+		$this->leaveTrailPage('DELETE');
 		return parent::afterDelete($event);
 	}
 
@@ -101,18 +104,28 @@ class LoggableBehavior extends CActiveRecordBehavior{
 	public function setOldAttributes($value){
 		$this->_oldattributes=$value;
 	}
-
-	public function leaveTrail($action, $name = null, $value = null, $old_value = null){
-		$log			= new AuditTrail();
-		$log->old_value = $old_value;
-		$log->new_value = $value;
-		$log->action	= $action;
-		$log->model		= get_class($this->getOwner()); // Gets a plain text version of the model name
-		$log->model_id	= $this->getNormalizedPk();
-		$log->field		= $name;
-		$log->stamp		= $this->storeTimestamp ? time() : date($this->dateFormat); // If we are storing a timestamp lets get one else lets get the date
-		$log->user_id	= $this->getUserId(); // Lets get the user id
-		return $log->save();
+        
+        public function leaveTrailPage($action){
+		$pageLog                = new AuditTrailPage();
+		$pageLog->action        = $action;
+		$pageLog->model         = get_class($this->getOwner()); // Gets a plain text version of the model name
+		$pageLog->model_id      = $this->getNormalizedPk();
+		$pageLog->stamp         = $this->storeTimestamp ? time() : date($this->dateFormat); // If we are storing a timestamp lets get one else lets get the date
+		$pageLog->user_id       = $this->getUserId(); // Lets get the user id
+		if ($pageLog->save()) {
+                    return $pageLog->id;
+                } else {
+                    return false;
+                }
+	}
+        
+        public function leaveTrailRecord($pageId, $name = null, $value = null, $old_value = null){
+		$recordLog              = new AuditTrailRecord();
+                $recordLog->page_id     = $pageId;
+		$recordLog->old_value   = $old_value;
+		$recordLog->new_value   = $value;
+		$recordLog->field       = $name;
+		return $recordLog->save();
 	}
 
 	public function getUserId(){
