@@ -72,12 +72,12 @@ class AuditTrailPage extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'action' => 'Action',
-			'model' => 'Model',
-			'stamp' => 'Stamp',
-			'user_id' => 'User',
-			'model_id' => 'Model',
+			'id' => Yii::t('auditTrail', 'ID'),
+			'action' => Yii::t('auditTrail', 'Action'),
+			'model' => Yii::t('auditTrail', 'Model'),
+			'stamp' => Yii::t('auditTrail', 'Stamp'),
+			'user_id' => Yii::t('auditTrail', 'User'),
+			'model_id' => Yii::t('auditTrail', 'Model ID'),
 		);
 	}
         
