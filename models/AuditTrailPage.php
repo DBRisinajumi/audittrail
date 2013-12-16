@@ -16,6 +16,8 @@
  */
 class AuditTrailPage extends CActiveRecord
 {
+        public $stampRange;
+        public static $separatorRange = " - ";
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -49,7 +51,7 @@ class AuditTrailPage extends CActiveRecord
 			array('action, model, user_id, model_id', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, action, model, stamp, user_id, model_id', 'safe', 'on'=>'search'),
+			array('id, action, model, stampRange, user_id, model_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -94,6 +96,8 @@ class AuditTrailPage extends CActiveRecord
 	{
 		// Warning: Please modify the following code to remove attributes that
 		// should not be searched.
+            
+                
 
 		$criteria=new CDbCriteria;
 
@@ -103,6 +107,11 @@ class AuditTrailPage extends CActiveRecord
 		$criteria->compare('stamp',$this->stamp,true);
 		$criteria->compare('user_id',$this->user_id,true);
 		$criteria->compare('model_id',$this->model_id,true);
+                if (isset($this->stampRange) && trim($this->stampRange) != "") {
+                    $arrayDate = explode(self::$separatorRange, $this->stampRange);
+                    if (isset($arrayDate[0], $arrayDate[1]))
+                        $criteria->addBetweenCondition('stamp', $arrayDate[0], $arrayDate[1]);
+                }
                 $criteria->mergeWith($this->getDbCriteria());
 		return new CActiveDataProvider(
 			get_class($this),
