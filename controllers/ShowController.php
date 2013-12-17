@@ -37,13 +37,22 @@ class ShowController extends Controller {
      * @param int $model_id
      */
     public function actionFancybox($model_name,$model_id) {
-        $m = new AuditTrail();
-        $m->unsetAttributes();
-        $m->model = $model_name;
-        $m->model_id = $model_id;
+
+        $model = new AuditTrail();
+        $model->unsetAttributes();
+        $model->model = $model_name;
+        $model->model_id = $model_id;
+
+        //perform only autoload
+        class_exists($model_name);
+
+        //import module for translations
+        Yii::setPathOfAlias($model_name.'Module', Yii::getPathOfAlias($model_name).'/../');
+        Yii::import($model_name.'Module.*');
+        
         $this->renderpartial(
             'fancybox', array(
-            'model' => $m,
+            'model' => $model,
                 )
         );
     }

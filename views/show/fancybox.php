@@ -13,10 +13,9 @@ $this->widget('TbGridView', array(
             'name' => 'stamp',
         ),        
         array(
-            'name' => 'action',
-        ),
-        array(
             'name' => 'field',
+            'value' => 'CHtml::activeLabel('.$model->model.'::model()'.',$data->field)',
+            'type'=>'raw',
         ),
         array(
             'name' => 'old_value',
