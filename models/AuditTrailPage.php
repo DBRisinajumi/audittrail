@@ -105,7 +105,7 @@ class AuditTrailPage extends CActiveRecord
 		$criteria->compare('action',$this->action,true);
 		$criteria->compare('model',$this->model,true);
 		$criteria->compare('stamp',$this->stamp,true);
-		$criteria->compare('user_id',$this->user_id,true);
+		$criteria->compare('user_id',$this->user_id);
 		$criteria->compare('model_id',$this->model_id,true);
                 if (isset($this->stampRange) && trim($this->stampRange) != "") {
                     $arrayDate = explode(self::$separatorRange, $this->stampRange);
