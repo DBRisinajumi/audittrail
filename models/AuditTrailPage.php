@@ -80,6 +80,7 @@ class AuditTrailPage extends CActiveRecord
 			'stamp' => Yii::t('auditTrail', 'Stamp'),
 			'user_id' => Yii::t('auditTrail', 'User'),
 			'model_id' => Yii::t('auditTrail', 'Model ID'),
+                        'stampRange' => Yii::t('auditTrail', 'Stamp Range'),
 		);
 	}
         
