@@ -47,7 +47,7 @@ class AuditTrailPage extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('action, model, stamp, model_id', 'required'),
+			array('action, stamp', 'required'),
 			array('action, model, user_id, model_id', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
