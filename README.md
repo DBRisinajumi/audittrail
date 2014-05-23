@@ -49,7 +49,16 @@ Reference the `AuditTrail` model within your configuration:
 
 **Note** You can move `AuditTrail` to your `models` folder preventing you from having to link it like this.
 
-### Step 4
+### step 4 - Define modules
+        'audittrail' => array(//++
+            'class' => 'vendor.dbrisinajumi.audittrail.AudittrailModule', 
+            'ref_field_sql' => array(
+                'car_id' => 'SELECT car_reg_number v FROM cars WHERE car_id = #id#',
+                'price_id' => "SELECT price from prices where id = #id#",
+            ),
+        ),        
+
+### Step 5
 
 Simply use the behaviour within a model like:
 
@@ -57,7 +66,7 @@ Simply use the behaviour within a model like:
 		'class' => 'audittrail.behaviors.LoggableBehavior',
 	)
 
-### step 5
+### step 6
 
 For migration in configuration file console add
 	'aliases' => array(
