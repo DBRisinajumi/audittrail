@@ -19,9 +19,11 @@ $this->widget('TbGridView', array(
         ),
         array(
             'name' => 'old_value',
+            'value' => 'Yii::app()->getModule("audittrail")->getRefFieldValue($data->field,$data->old_value)',
         ),
         array(
             'name' => 'new_value',
+            'value' => 'Yii::app()->getModule("audittrail")->getRefFieldValue($data->field,$data->new_value)',
         ),
         array(
             'name' => 'user_id',

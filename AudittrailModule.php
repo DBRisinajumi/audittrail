@@ -2,6 +2,12 @@
 
 class AudittrailModule extends CWebModule
 {
+    /**
+     * define sql selects for geting referenc field values
+     * @var array 
+     */
+    public $ref_field_sql = array();
+    
 	public function init()
 	{
 		// this method is called when the module is being created
@@ -11,7 +17,7 @@ class AudittrailModule extends CWebModule
 		$this->setImport(array(
 			'audittrail.components.*',
 		));
-         $this->defaultController = 'BfrfFuelRefill';
+
 	}
 
 	public function beforeControllerAction($controller, $action)
@@ -25,4 +31,29 @@ class AudittrailModule extends CWebModule
 		else
 			return false;
 	}
+    
+    
+    /**
+     * get ref field value
+     * @param char $field field name
+     * @param int $id field value
+     * @return char
+     */
+    public static function getRefFieldValue($field,$id){
+        
+        if(empty($id)){
+            return $id;
+        }
+        $ref_field_sql = Yii::app()->getModule('audittrail')->ref_field_sql;
+        if(!isset($ref_field_sql[$field])){
+            return $id;
+        }
+        $sql = str_replace('#id#', $id, $ref_field_sql[$field]);
+        $value = Yii::app()->db->createCommand($sql)->queryScalar();
+        if($value === FALSE){
+            return $id;
+        }
+        
+        return $value;
+    }
 }
