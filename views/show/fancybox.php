@@ -18,7 +18,7 @@ $this->widget('TbGridView', array(
         ),        
         array(
             'name' => 'field',
-            'value' => 'CHtml::activeLabel('.$model->model.'::model()'.',$data->field)."/".$data->field',
+            'value' => 'CHtml::activeLabel('.$model->model.'::model()'.',$data->field)',
             'type'=>'raw',
         ),
         array(
