@@ -1,3 +1,7 @@
+<h2>
+    <i class="icon-info-sign"></i>
+    <?=Yii::t('AudittrailModule.main','Auditrail records')?>
+</h2>
 <?
 $this->widget('TbGridView', array(
     'dataProvider' => $model->search(),
@@ -14,7 +18,7 @@ $this->widget('TbGridView', array(
         ),        
         array(
             'name' => 'field',
-            'value' => 'CHtml::activeLabel('.$model->model.'::model()'.',$data->field)',
+            'value' => 'CHtml::activeLabel('.$model->model.'::model()'.',$data->field)."/".$data->field',
             'type'=>'raw',
         ),
         array(

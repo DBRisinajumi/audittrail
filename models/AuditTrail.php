@@ -73,15 +73,15 @@ class AuditTrail extends CActiveRecord {
 	 */
 	public function attributeLabels() {
 		return array(
-			'id' => 'ID',
-			'old_value' => 'Old Value',
-			'new_value' => 'New Value',
-			'action' => 'Action',
-			'model' => 'Type',
-			'field' => 'Field',
-			'stamp' => 'Stamp',
-			'user_id' => 'User',
-			'model_id' => 'ID',
+			'id' => Yii::t('AudittrailModule','ID'),
+			'old_value' => Yii::t('AudittrailModule.main','Old Value'),
+			'new_value' => Yii::t('AudittrailModule.main','New Value'),
+			'action' => Yii::t('AudittrailModule.main','Action'),
+			'model' => Yii::t('AudittrailModule.main','Type'),
+			'field' => Yii::t('AudittrailModule.main','Field'),
+			'stamp' => Yii::t('AudittrailModule.main','Stamp'),
+			'user_id' => Yii::t('AudittrailModule.main','User'),
+			'model_id' => Yii::t('AudittrailModule.main','ID'),
 		);
 	}
 
