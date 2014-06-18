@@ -108,6 +108,8 @@ class AuditTrail extends CActiveRecord {
 		$criteria->compare('stamp', $this->stamp, true);
 		$criteria->compare('user_id', $this->user_id);
 		$criteria->compare('model_id', $this->model_id);
+		$criteria->order = 't.stamp DESC ';
+        
 
         $criteria->mergeWith($this->getDbCriteria());
 		return new CActiveDataProvider(

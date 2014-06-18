@@ -4,7 +4,13 @@
 </h2>
 <?
 $this->widget('TbGridView', array(
-    'dataProvider' => $model->search(),
+    'dataProvider' => $model->search(
+                array(    
+                    'pagination'=>array(
+                        'pageSize'=>1000,
+                    ),
+                )
+            ),
     'id' => 'audit_trail_grid',
     'type' => 'bordered condensed',
     'template' => '{items}',
