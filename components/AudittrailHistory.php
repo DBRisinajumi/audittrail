@@ -1,6 +1,6 @@
 <?php
 /**
- * create active record grid with full auditrail history
+ * create active record grid with full audit trail history
  * 
  */
 class AudittrailHistory extends CWidget {

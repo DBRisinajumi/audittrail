@@ -1,6 +1,6 @@
 <h2>
     <i class="icon-info-sign"></i>
-    <?=Yii::t('AudittrailModule.main','Auditrail records')?>
+    <?=Yii::t('AudittrailModule.main','Audit Trail records')?>
 </h2>
 <?
 $this->widget('TbGridView', array(

@@ -25,6 +25,6 @@ return array (
     'Field' => 'Lauks',
     'Stamp' => 'Laiks',
     'User' => 'Lietotājs',
-    'Auditrail' => 'Auditpieraksti',
-    'Auditrail records' => 'Auditpieraksti',
+    'Audit Trail' => 'Auditpieraksti',
+    'Audit Trail records' => 'Auditpieraksti',
 );

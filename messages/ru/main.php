@@ -25,6 +25,6 @@ return array (
     'Field' => 'Поле',
     'Stamp' => 'Время',
     'User' => 'Пользователь',
-    'Auditrail' => 'Журнал аудита',
-    'Auditrail records' => 'Записей журнала аудита',
+    'Audit Trail' => 'Журнал аудита',
+    'Audit Trail records' => 'Записей журнала аудита',
 );
