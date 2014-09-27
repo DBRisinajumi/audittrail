@@ -18,11 +18,12 @@ This extension is listed on [packagist](https://github.com/DBRisinajumi/audittra
 	php copmoser.phar require dbrisinajumi/audittrail
 	
 Require https://github.com/yiiext/fancybox-widget. Listed in [phundament](http://packages.phundament.com) or add in composer:
+
 	"repositories":[
-        {
-                "type": "vcs",
-                "url": "https://github.com/yiiext/fancybox-widget"
-        }
+	        {
+        	        "type": "vcs",
+                	"url": "https://github.com/yiiext/fancybox-widget"
+        	}
         ]
 
 ### Step 1
