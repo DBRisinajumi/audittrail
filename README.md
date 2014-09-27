@@ -67,6 +67,8 @@ Reference the `AuditTrail` model within your configuration:
             ),
         ),        
 
+By ref_field_sql can define in fancybox shoving instead reference keys show it names. Select must contain column v - label of foreign key.
+
 ### Step 5
 
 Simply use the behaviour within a model like:
