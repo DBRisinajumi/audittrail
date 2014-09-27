@@ -22,7 +22,7 @@ class m140917_141901_init extends CDbMigration {
             `model_id` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
             PRIMARY KEY (`id`),
             KEY `model` (`model`(4),`model_id`(4))
-          ) ENGINE=InnoDB AUTO_INCREMENT=230 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+          ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
                 
                    ";
          $this->execute($sql);
