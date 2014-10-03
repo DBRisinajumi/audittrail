@@ -7,6 +7,7 @@ class AudittrailModule extends CWebModule
      * @var array 
      */
     public $ref_field_sql = array();
+    public $ref_models = array();
     
 	public function init()
 	{

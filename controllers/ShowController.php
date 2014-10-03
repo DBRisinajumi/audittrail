@@ -53,6 +53,8 @@ class ShowController extends Controller {
         $this->renderpartial(
             'fancybox', array(
             'model' => $model,
+            'model_name' => $model_name,
+            'model_id' => $model_id,
                 )
         );
     }
