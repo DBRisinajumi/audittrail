@@ -18,15 +18,30 @@ if(!empty(Yii::app()->getModule("audittrail")->ref_models) && isset(Yii::app()->
 
     foreach (Yii::app()->getModule('audittrail')->ref_models[$model_name] as $ref_model_name => $ref_field){
         
-        $rm = new $ref_model_name;
-        $rm_data = $rm->findAllByAttributes(array($ref_field => $model_id));
-        if(empty($rm_data)){
+//        $rm = new $ref_model_name;
+//        $rm_data = $rm->findAllByAttributes(array($ref_field => $model_id));
+//        if(empty($rm_data)){
+//            continue;
+//        }
+//        $rm_pk = array();
+//        foreach ($rm_data as $rm_row){
+//            $rm_pk[] = $rm_row->primaryKey;
+//        }
+        
+        $criteria = new CDbCriteria;
+        $criteria->distinct=true;
+        $criteria->compare('model',$ref_model_name);
+        $criteria->compare('field',$ref_field);
+        $criteria->compare('new_value',$model_id);
+        $criteria->compare('action','SET');
+        $audit_trail = AuditTrail::model()->findAll($criteria);
+        if(empty($audit_trail)){
             continue;
         }
         $rm_pk = array();
-        foreach ($rm_data as $rm_row){
-            $rm_pk[] = $rm_row->primaryKey;
-        }
+        foreach ($audit_trail as $at_row){
+            $rm_pk[] = $at_row->model_id;
+        }        
         
         $criteria = new CDbCriteria;
         $criteria->compare('model',$ref_model_name);

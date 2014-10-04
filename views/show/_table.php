@@ -25,6 +25,9 @@ $this->widget('TbGridView', array(
             'type'=>'raw',
         ),
         array(
+            'name' => 'action',
+        ),
+        array(
             'name' => 'old_value',
             'value' => 'Yii::app()->getModule("audittrail")->getRefFieldValue($data->field,$data->old_value)',
         ),
