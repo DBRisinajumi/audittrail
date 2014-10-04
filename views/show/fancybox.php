@@ -18,7 +18,15 @@ if(!empty(Yii::app()->getModule("audittrail")->ref_models) && isset(Yii::app()->
 
     foreach (Yii::app()->getModule('audittrail')->ref_models[$model_name] as $ref_model_name => $ref_field){
         
-//        $rm = new $ref_model_name;
+        if($ref_model_name == 'yii_t_category'){
+            continue;
+        }
+        if($ref_model_name == 'yii_t_message'){
+            continue;
+        }
+        
+        $rm = new $ref_model_name;
+        $rm_primary_key_field = $rm->tableSchema->primaryKey;
 //        $rm_data = $rm->findAllByAttributes(array($ref_field => $model_id));
 //        if(empty($rm_data)){
 //            continue;
@@ -34,6 +42,8 @@ if(!empty(Yii::app()->getModule("audittrail")->ref_models) && isset(Yii::app()->
         $criteria->compare('field',$ref_field);
         $criteria->compare('new_value',$model_id);
         $criteria->compare('action','SET');
+
+
         $audit_trail = AuditTrail::model()->findAll($criteria);
         if(empty($audit_trail)){
             continue;
@@ -46,7 +56,8 @@ if(!empty(Yii::app()->getModule("audittrail")->ref_models) && isset(Yii::app()->
         $criteria = new CDbCriteria;
         $criteria->compare('model',$ref_model_name);
         $criteria->compare('model_id',$rm_pk);
-        
+        $criteria->addCondition("field !='".$rm_primary_key_field."'");        
+        $criteria->addCondition("field !='".$ref_field."'");        
         $atrm_provider = new CActiveDataProvider('AuditTrail', array(
             'criteria' => $criteria,
 

@@ -1,7 +1,17 @@
 <h2 class="header blue lighter smaller">
 <?php
-$model = new $model_name;
-echo CHtml::activeLabel($model ,$model_name);
+
+if(!empty(Yii::app()->getModule("audittrail")->ref_models) 
+        && isset(Yii::app()->getModule("audittrail")->ref_models[$model_name])
+        && isset(Yii::app()->getModule("audittrail")->ref_models[$model_name]['yii_t_category'])
+        )
+{
+    $yii_t = Yii::app()->getModule("audittrail")->ref_models[$model_name];
+    echo Yii::t($yii_t['yii_t_category'],$yii_t['yii_t_message']);
+}else{
+    $model = new $model_name;
+    echo CHtml::activeLabel($model ,$model_name);
+}
 ?>
 </h2>    
 <?php
