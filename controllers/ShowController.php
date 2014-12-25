@@ -21,6 +21,7 @@ class ShowController extends Controller {
                 'allow',
                 'actions' => array(
                     'Fancybox',
+                    'UiDialogBox'
                 ),
                 'roles' => array('audittrail'),
             ),
@@ -52,6 +53,34 @@ class ShowController extends Controller {
         
         $this->renderpartial(
             'fancybox', array(
+            'model' => $model,
+            'model_name' => $model_name,
+            'model_id' => $model_id,
+                )
+        );
+    }
+    
+    /**
+     * show UI Dialog Box with history
+     * @param string $model_name
+     * @param int $model_id
+     */
+    public function actionUiDialogBox($model_name,$model_id) {
+
+        $model = new AuditTrail();
+        $model->unsetAttributes();
+        $model->model = $model_name;
+        $model->model_id = $model_id;
+
+        //perform only autoload
+        class_exists($model_name);
+
+        //import module for translations
+        Yii::setPathOfAlias($model_name.'Module', Yii::getPathOfAlias($model_name).'/../');
+        Yii::import($model_name.'Module.*');
+        
+        $this->renderpartial(
+            'ui_dialog', array(
             'model' => $model,
             'model_name' => $model_name,
             'model_id' => $model_id,
