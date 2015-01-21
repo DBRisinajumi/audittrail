@@ -12,6 +12,6 @@
     ],
     "require": {
         "php":">=5.1.0",
-        "yiiext/fancybox-widget":"dev-master"
+        "uldisn/ace": "dev-master"
     }
 }

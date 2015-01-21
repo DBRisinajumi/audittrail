@@ -17,7 +17,7 @@ This extension is listed on [packagist](https://github.com/DBRisinajumi/audittra
 
 	php copmoser.phar require dbrisinajumi/audittrail
 	
-Require https://github.com/yiiext/fancybox-widget. Listed in [phundament](http://packages.phundament.com) or add in composer:
+Require https://github.com/uldisn/ace. Listed in [Packagist](http://packagist.com) or add in composer:
 
 	"repositories":[
 	        {
@@ -67,7 +67,7 @@ Reference the `AuditTrail` model within your configuration:
             ),
         ),        
 
-By ref_field_sql can define in fancybox shoving instead reference keys show it names. Select must contain column v - label of foreign key.
+By ref_field_sql can define in dialog box shoving instead reference keys show it names. Select must contain column v - label of foreign key.
 
 ### Step 5
 
