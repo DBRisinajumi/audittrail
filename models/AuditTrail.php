@@ -131,4 +131,43 @@ class AuditTrail extends CActiveRecord {
 
 		);
 	}
+    
+    /**
+     * create one bulk sql statemet for save many inserts 
+     * @param array $rows changes
+     * @param char $model model name
+     * @param int $user_id user
+     * @param char $model_id model PK value
+     */
+    public function saveBulk($rows,$model,$user_id,$model_id,$stamp){
+
+        
+        $values = [];
+        foreach($rows as $row){
+            $values[] = Yii::app()->db->quoteValue($row['old_value']).",".
+                        Yii::app()->db->quoteValue($row['new_value']).",".
+                        Yii::app()->db->quoteValue($row['action']).",".
+                        "'".$model."',".
+                        Yii::app()->db->quoteValue($row['field']).",".
+                        Yii::app()->db->quoteValue($stamp).",".
+                        "'".$user_id."',".
+                        "'".$model_id."'";
+        }
+        
+        $sql = "
+            INSERT INTO `".$this->tableName()."` (
+            `old_value`,
+            `new_value`,
+            `action`,
+            `model`,
+            `field`,
+            `stamp`,
+            `user_id`,
+            `model_id`
+            )
+            VALUES
+            (" . implode('),(',$values) . ")";
+        
+          Yii::app()->db->createCommand($sql)->query();
+    }
 }

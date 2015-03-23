@@ -2,17 +2,23 @@
 
 class LoggableBehavior extends CActiveRecordBehavior {
 
-	private $_oldAttributes = array();
+	private $_oldAttributes = [];
 
-	public $allowed = array();
-	public $ignored = array();
-	public $ignored_class = array();
+	public $allowed = [];
+	public $ignored = [];
+	public $ignored_class = [];
 
 	public $dateFormat = 'Y-m-d H:i:s';
 	public $userAttribute = null;
 
 	public $storeTimestamp = false;
 	public $skipNulls = true;
+
+    /**
+     * collect changes for bulk saving
+     * @var array
+     */
+    private $log_records = [];
 
 	public function afterSave($event) {
 		$allowedFields = $this->allowed;
@@ -74,11 +80,22 @@ class LoggableBehavior extends CActiveRecordBehavior {
 		
 		// Reset old attributes to handle the case with the same model instance updated multiple times
 		$this->_oldAttributes = $this->getOwner()->getAttributes();
-				
+
+        // get additional data for save logs
+        $model = get_class($this->getOwner()); // Gets a plain text version of the model name
+        $model_id = $this->getNormalizedPk();
+        $user_id = $this->getUserId(); // Lets get the        
+        $stamp = $this->storeTimestamp ? time() : date($this->dateFormat); // If we are storing a timestamp lets get one else lets get the date
+        
+        //save logs as bulk
+        $log = new AuditTrail();
+        $log->saveBulk($this->log_records, $model, $user_id, $model_id, $stamp);
+        $this->log_records =[];
+        
 		return parent::afterSave($event);
 	}
 
-	public function auditAttributes($newattributes, $oldattributes = array()) {
+	public function auditAttributes($newattributes, $oldattributes = []) {
 
 		foreach ($newattributes as $name => $value) {
 			$old = isset($oldattributes[$name]) ? $oldattributes[$name] : '';
@@ -106,19 +123,17 @@ class LoggableBehavior extends CActiveRecordBehavior {
 	}
 
 	public function leaveTrail($action, $name = null, $value = null, $old_value = null) {
-		$log			= new AuditTrail();
-		$log->old_value = $old_value;
-		$log->new_value = $value;
-		$log->action	= $action;
-		$log->model		= get_class($this->getOwner()); // Gets a plain text version of the model name
-		$log->model_id	= $this->getNormalizedPk();
-		$log->field		= $name;
-		$log->stamp		= $this->storeTimestamp ? time() : date($this->dateFormat); // If we are storing a timestamp lets get one else lets get the date
-		$log->user_id	= $this->getUserId(); // Lets get the user id
-		return $log->save();
+        $this->log_records[] = [
+            'old_value' => $old_value,
+            'new_value' => $value,
+            'action' => $action,
+            'field' => $name,
+        ];
+        
+        return;
 	}
 
-	public function getUserId() {
+    public function getUserId() {
 		if (isset($this->userAttribute)) {
 			$data = $this->getOwner()->getAttributes();
 			return isset($data[$this->userAttribute]) ? $data[$this->userAttribute] : null;
