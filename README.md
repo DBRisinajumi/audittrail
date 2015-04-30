@@ -59,15 +59,44 @@ Reference the `AuditTrail` model within your configuration:
 **Note** You can move `AuditTrail` to your `models` folder preventing you from having to link it like this.
 
 ### step 4 - Define modules
+
+```
         'audittrail' => array(//++
             'class' => 'vendor.dbrisinajumi.audittrail.AudittrailModule', 
+            'ref_models' => array(
+                'DtrsTruckStatus' => array(
+                    'DtrcTruckContainers' => 'dtrc_dtrs_id',
+                    'D2files' => array(
+                        'compare' => array(
+                            'model' => 'depo2.DtrsTruckStatus',
+                            'model_id' => 'pk_value',
+                            ),
+
+                    ),                    
+                    'yii_t_category' => 'Depo2Module.model',
+                    'yii_t_message' => 'Truck',                    
+                ),
+                'DtrcTruckContainers' => array(
+                    'yii_t_category' => 'Depo2Module.model',
+                    'yii_t_message' => 'Containers',                    
+                ),
+                'D2files' => array(
+                    'hidded_fields' => ['add_datetime','user_id','model','model_id','upload_path'],
+                    'yii_t_category' => 'D2filesModule.crud_static',
+                    'yii_t_message' => 'Attachments'
+                ),
+
             'ref_field_sql' => array(
                 'car_id' => 'SELECT car_reg_number v FROM cars WHERE car_id = #id#',
                 'price_id' => "SELECT price from prices where id = #id#",
             ),
         ),        
+```
+* by ref_models add for shoving in popup related table changes:
+** 'rel_tabel' => 'ref_field'  - add to popup changes for table rel_table for records main_table.id = rel_table.ref_field
+** yii_t_category and yii_t_message used for displayng header for table: Yii::t('yii_t_category','yii_t_message')
 
-By ref_field_sql can define in dialog box shoving instead reference keys show it names. Select must contain column v - label of foreign key.
+* By ref_field_sql can define in dialog box shoving instead reference keys show it names. Select must contain column v - label of foreign key.
 
 ### Step 5
 
@@ -168,21 +197,19 @@ This is useful if you put the behaviour in a class that extends CActiveRecord wh
             array('model'=>$model,'id' => 'audittrail_data_grid')
             );
 
-## link for fancy box
-
-    $this->widget('vendor.yiiext.fancybox-widget.EFancyboxWidget',array(
-        'selector'=>'a[href*=\'/fancybox\']',
-        'options'=>array(
-        ),
-    ));        
-
-    echo CHtml::link(
-            'Auditrecords', array(
-        '/audittrail/show/fancybox',
-        'model_name' => get_class($model),
-        'model_id' => $model->getPrimaryKey(),
-    ));
-
+## link for popup
+```
+               if(Yii::app()->user->checkAccess("audittrail") 
+                    && isset(Yii::app()->getModule('depo2')->options['audittrail']) 
+                    && Yii::app()->getModule('depo2')->options['audittrail'])
+                {        
+                    Yii::import('audittrail.*');
+                    $this->widget("vendor.dbrisinajumi.audittrail.widgets.AudittrailViewTbButton",array(
+                        'model_name' => get_class($model),
+                        'model_id' => $model->getPrimaryKey(),
+                    ));                    
+                }         
+```
 ## Printing out the audit log
 
 Since this no longer uses a module to do its work there is no global configuration for the previously inbuilt audit log to work from. Instead you can insert an audit log

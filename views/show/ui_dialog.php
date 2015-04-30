@@ -1,4 +1,4 @@
-<?
+<?php
 //main table
 $provider = $model->search(
                 array(    
@@ -12,6 +12,7 @@ $this->renderpartial('_table', array('model_name' => $model->model,'provider' =>
 
 if(!empty(Yii::app()->getModule("audittrail")->ref_models) && isset(Yii::app()->getModule("audittrail")->ref_models[$model_name])){
 
+
     foreach (Yii::app()->getModule('audittrail')->ref_models[$model_name] as $ref_model_name => $ref_field){
         
         if($ref_model_name == 'yii_t_category'){
@@ -23,37 +24,62 @@ if(!empty(Yii::app()->getModule("audittrail")->ref_models) && isset(Yii::app()->
         
         $rm = new $ref_model_name;
         $rm_primary_key_field = $rm->tableSchema->primaryKey;
-//        $rm_data = $rm->findAllByAttributes(array($ref_field => $model_id));
-//        if(empty($rm_data)){
-//            continue;
-//        }
-//        $rm_pk = array();
-//        foreach ($rm_data as $rm_row){
-//            $rm_pk[] = $rm_row->primaryKey;
-//        }
         
-        $criteria = new CDbCriteria;
-        $criteria->distinct=true;
-        $criteria->compare('model',$ref_model_name);
-        $criteria->compare('field',$ref_field);
-        $criteria->compare('new_value',$model_id);
-        $criteria->compare('action','SET');
-
-
-        $audit_trail = AuditTrail::model()->findAll($criteria);
-        if(empty($audit_trail)){
-            continue;
+        if(!is_array($ref_field)){
+            //get ref table pk values
+            $criteria = new CDbCriteria;
+            $criteria->distinct=true;
+            $criteria->compare('model',$ref_model_name);
+            $criteria->compare('field',$ref_field);
+            $criteria->compare('new_value',$model_id);
+            $criteria->compare('action','SET');
+            $audit_trail = AuditTrail::model()->findAll($criteria);
+            if(empty($audit_trail)){
+                continue;
+            }
+            $rm_pk = array();
+            foreach ($audit_trail as $at_row){
+                $rm_pk[] = $at_row->model_id;
+            }        
+        }else{
+            $criteria = new CDbCriteria;
+            $criteria->distinct=true;
+            foreach($ref_field['compare'] as $rmfn => $rmfv){
+                if($rmfv == 'pk_value'){
+                    $criteria->compare($rmfn,$model_id);
+                    continue;
+                }
+                $criteria->compare($rmfn,$rmfv);
+            }
+            
+            $ref_model = new $ref_model_name;
+            
+            $rmd = $ref_model->findAll($criteria);
+            if(empty($rmd)){
+                continue;
+            }
+            $rm_pk = array();
+            foreach ($rmd as $at_row){
+                $rm_pk[] = $at_row->primaryKey;
+            }                    
+            
         }
-        $rm_pk = array();
-        foreach ($audit_trail as $at_row){
-            $rm_pk[] = $at_row->model_id;
-        }        
         
         $criteria = new CDbCriteria;
         $criteria->compare('model',$ref_model_name);
         $criteria->compare('model_id',$rm_pk);
-        $criteria->addCondition("field !='".$rm_primary_key_field."'");        
-        $criteria->addCondition("field !='".$ref_field."'");        
+        $criteria->addCondition("field !='".$rm_primary_key_field."'");      
+        if(!is_array($ref_field)){
+            $criteria->addCondition("field !='".$ref_field."'");        
+        }
+        if(isset(Yii::app()->getModule('audittrail')->ref_models[$ref_model_name])){
+            $a = Yii::app()->getModule('audittrail')->ref_models[$ref_model_name];
+            if(isset($a['hidded_fields'])){
+                foreach ($a['hidded_fields'] as $hidded_field){
+                    $criteria->addCondition("field !='".$hidded_field."'");   
+                }
+            }
+        }
         $atrm_provider = new CActiveDataProvider('AuditTrail', array(
             'criteria' => $criteria,
 
