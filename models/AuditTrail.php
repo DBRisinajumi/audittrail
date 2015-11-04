@@ -153,6 +153,10 @@ class AuditTrail extends CActiveRecord {
                         "'".$user_id."',".
                         "'".$model_id."'";
         }
+
+        if(empty($values)){
+            return;
+        }
         
         $sql = "
             INSERT INTO `".$this->tableName()."` (
